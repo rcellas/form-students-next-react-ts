@@ -21,6 +21,8 @@
     "@types/react-dom": "^19.0.2",
     "autoprefixer": "^10.4.20",
     "cypress": "^13.16.1",
+    "cypress-axe": "^1.5.0",
+    "cypress-file-upload": "^5.0.8",
     "eslint": "^9",
     "eslint-config-next": "15.1.0",
     "postcss": "^8.4.49",
