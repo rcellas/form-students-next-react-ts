@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "axe-core": "^4.10.2",
     "form-students": "file:",
     "next": "15.1.0",
     "react": "^19.0.0",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/cypress": "^1.1.6",
     "@types/node": "^20",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.2",

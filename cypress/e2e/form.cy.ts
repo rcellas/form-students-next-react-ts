@@ -44,6 +44,7 @@ describe('Formulario de Estudiante', () => {
     cy.get('input[name="codigoPostal"]').type('28001').should('have.value', '28001');
   });
 
+
   it('Verifica que el botón de envío está presente y se puede hacer clic', () => {
     cy.get('button[type="submit"]').should('exist').and('be.visible').click();
   });
@@ -68,26 +69,21 @@ describe('Formulario de Estudiante', () => {
     cy.get('button[type="submit"]').click();
   });
 
-  // tarda demasiado
-  // it('Realiza una auditoría de accesibilidad en toda la página', () => {
-  //   cy.checkA11y();
-  // });
-
-  it('Realiza una auditoría de accesibilidad en el formulario', () => {
-    cy.get('form').checkA11y(); 
-  });
-
-  it('Realiza una auditoría de accesibilidad en campos específicos', () => {
-    cy.get('input[name="name"]').checkA11y();
-    cy.get('textarea[name="description"]').checkA11y();
-    cy.get('input[name="linkedin"]').checkA11y();
-    cy.get('input[name="cv"]').checkA11y();
-    cy.get('input[name="provincia"]').checkA11y();
-    cy.get('input[name="comunidad"]').checkA11y();
-    cy.get('input[name="codigoPostal"]').checkA11y();
-  });
-
-  it('Realiza una auditoría de accesibilidad en el botón de envío', () => {
-    cy.get('button[type="submit"]').checkA11y();
+  it('should run accessibility audits on the form', () => {
+    cy.checkA11y('form', {
+      runOnly: {
+        type: 'tag',
+        values: ['wcag2a', 'wcag2aa'], 
+      }
+    }, (violations) => {
+      if (violations.length) {
+        cy.log('Accesibilidad: Se encontraron violaciones');
+        violations.forEach((violation) => {
+          cy.log(`${violation.id}: ${violation.description}`);
+          cy.log('Nodos afectados:', violation.nodes.map((node) => node.html).join(', '));
+        });
+      }
+      cy.wrap(violations).should('have.length', 0, `${violations.length} accessibility violation${violations.length === 1 ? '' : 's'} detected`);
+    });
   });
 });

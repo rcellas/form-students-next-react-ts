@@ -1,45 +1,18 @@
 /// <reference types="cypress" />
-// 
-//***********************************************
-// This example commands.ts shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
 import 'cypress-file-upload';
 import 'cypress-axe';
 
-Cypress.Commands.add('checkA11y', (context, options, violationCallback, skipFailures) => {
-  cy.injectAxe();
-  cy.checkA11y(context, options, violationCallback, skipFailures);
+// Extender la interfaz Chainable para incluir el comando personalizado
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      testA11y(context: any, options?: any, violationCallback?: (violations: any[]) => void, skipFailures?: boolean): Chainable<Element>;
+    }
+  }
+}
+
+// Definir un comando personalizado para inyectar axe-core y luego realizar la comprobación
+Cypress.Commands.add('testA11y', (context: any, options?: any, violationCallback?: (violations: any[]) => void, skipFailures?: boolean) => {
+  cy.injectAxe(); // Inyectar axe-core
+  cy.checkA11y(context, options, violationCallback, skipFailures); // Usar el comando original de cypress-axe
 });
