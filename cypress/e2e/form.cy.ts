@@ -67,6 +67,25 @@ describe('Student Form', () => {
     cy.get('input[name="codigoPostal"]').type('28001');
     cy.get('button[type="submit"]').click();
   });
+  it('Should verify that the form is submitted correctly using the keyboard', () => {
+    cy.get('input[name="name"]').type('John Doe');
+    cy.get('textarea[name="description"]').type('Student description');
+    const stacks = ['JavaScript', 'Python', 'Java', 'C#', 'Ruby'];
+    stacks.forEach(stack => {
+      cy.get(`input[type="checkbox"][id="${stack}"]`).check();
+    });
+    cy.get('input[name="linkedin"]').type('https://www.linkedin.com/in/johndoe');
+    const filePath = 'cv.pdf';
+    cy.get('input[name="cv"]').attachFile(filePath);
+    cy.get('input[name="cv"]').should('have.prop', 'files').then((files) => {
+      const fileList = files as unknown as FileList;
+      expect(fileList[0].name).to.equal('cv.pdf');
+    });
+    cy.get('input[name="provincia"]').type('Madrid');
+    cy.get('input[name="comunidad"]').type('Community of Madrid');
+    cy.get('input[name="codigoPostal"]').type('28001');
+    cy.get('input[name="codigoPostal"]').type('{enter}'); 
+  });
 
   it('Should run accessibility audits on the form', () => {
     cy.checkA11y('form', {

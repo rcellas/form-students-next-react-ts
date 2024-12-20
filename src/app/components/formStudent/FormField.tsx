@@ -1,32 +1,20 @@
+import React from "react";
 
 interface FormFieldProps {
   label: string;
   type: string;
   name: string;
   value?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  accept?: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   required?: boolean;
+  accept?: string;
   className?: string;
-  error?: string;
 }
 
-const FormField: React.FC<FormFieldProps> = ({
-  label,
-  type,
-  name,
-  value,
-  onChange,
-  accept,
-  required,
-  className,
-  error,
-}) => {
+const FormField: React.FC<FormFieldProps> = ({ label, type, name, value, onChange, required, accept, className }) => {
   return (
-    <div className={`form-field space-y-2 ${className}`}>
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
-        {label}
-      </label>
+    <div className="mb-4">
+      <label htmlFor={name} className="block text-gray-700 font-bold mb-2">{label}</label>
       {type === "textarea" ? (
         <textarea
           id={name}
@@ -34,36 +22,19 @@ const FormField: React.FC<FormFieldProps> = ({
           value={value}
           onChange={onChange}
           required={required}
-          className={`w-full p-2 border rounded focus:outline-none focus:ring ${
-            error ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-blue-500"
-          }`}
-          aria-describedby={`${name}-description`}
-          aria-invalid={!!error}
+          className={className}
         />
       ) : (
         <input
-          id={name}
           type={type}
+          id={name}
           name={name}
-          value={type === "file" ? undefined : value}
+          value={value}
           onChange={onChange}
-          accept={accept}
           required={required}
-          className={`w-full p-2 border rounded focus:outline-none focus:ring ${
-            error ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-blue-500"
-          }`}
-          aria-describedby={`${name}-description`}
-          aria-invalid={!!error}
+          accept={accept}
+          className={className}
         />
-      )}
-      {error ? (
-        <span id={`${name}-description`} className="text-sm text-red-600">
-          {error}
-        </span>
-      ) : (
-        <span id={`${name}-description`} className="text-sm text-gray-500">
-          {required ? "This field is required" : "This field is optional"}
-        </span>
       )}
     </div>
   );

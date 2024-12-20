@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import FormField from "./FormField";
 import StackField from "./StackField";
 
@@ -19,7 +19,11 @@ const StudentForm = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    if (e.target instanceof HTMLInputElement && e.target.files) {
+      setFormData({ ...formData, [name]: e.target.files[0] });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleCheckboxChange = (stackName: string) => {
@@ -31,13 +35,6 @@ const StudentForm = () => {
       };
     });
   };
-
-  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFormData((prevFormData) => ({ ...prevFormData, cv: file }));
-    }
-  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,7 +85,7 @@ const StudentForm = () => {
         onChange={handleChange}
         required
         accept=".pdf"
-        className="form-input"
+        className="w-full p-2 border border-gray-300 rounded"
       />
       <FormField
         label="Provincia"
